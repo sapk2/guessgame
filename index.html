@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the Number Game</title>
+    <style>
+        /* CSS Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .game-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 300px;
+        }
+
+        h1 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #4caf50;
+        }
+
+        .input-container {
+            margin: 20px 0;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 1em;
+            width: 60%;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            color: #fff;
+            background: #4caf50;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        .output {
+            margin-top: 20px;
+        }
+
+        .restart-button {
+            margin-top: 15px;
+            background-color: #f44336;
+        }
+
+        .restart-button:hover {
+            background-color: #e53935;
+        }
+
+        #feedback {
+            font-weight: bold;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>🎲 Guess the Number 🎯</h1>
+        <p>Guess a number between <strong>1</strong> and <strong>100</strong>.</p>
+        <div class="input-container">
+            <input type="number" id="guessInput" placeholder="Enter your guess" min="1" max="100">
+            <button id="submitGuess">Submit</button>
+        </div>
+        <div class="output">
+            <p id="feedback">Make your first guess!</p>
+            <p>Score: <span id="score">10</span></p>
+        </div>
+        <button id="restartGame" class="restart-button">Restart Game</button>
+    </div>
+
+    <script>
+        // JavaScript Logic
+        document.addEventListener("DOMContentLoaded", () => {
+            const guessInput = document.getElementById("guessInput");
+            const submitGuess = document.getElementById("submitGuess");
+            const feedback = document.getElementById("feedback");
+            const scoreSpan = document.getElementById("score");
+            const restartGame = document.getElementById("restartGame");
+
+            let secretNumber = Math.floor(Math.random() * 100) + 1;
+            let score = 10;
+
+            function resetGame() {
+                score = 10;
+                secretNumber = Math.floor(Math.random() * 100) + 1;
+                feedback.textContent = "Make your first guess!";
+                feedback.style.color = "#333";
+                scoreSpan.textContent = score;
+                guessInput.value = "";
+            }
+
+            function handleGuess() {
+                const userGuess = parseInt(guessInput.value);
+                if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
+                    feedback.textContent = "Please enter a valid number between 1 and 100!";
+                    feedback.style.color = "#f44336";
+                    return;
+                }
+
+                if (userGuess === secretNumber) {
+                    feedback.textContent = `🎉 Correct! The number was ${secretNumber}.`;
+                    feedback.style.color = "#4caf50";
+                } else {
+                    score--;
+                    feedback.textContent =
+                        userGuess < secretNumber
+                            ? "📉 Too low! Try again."
+                            : "📈 Too high! Try again.";
+                    feedback.style.color = "#333";
+
+                    if (score === 0) {
+                        feedback.textContent = `😢 Game Over! The number was ${secretNumber}.`;
+                        feedback.style.color = "#f44336";
+                    }
+                }
+
+                scoreSpan.textContent = score;
+            }
+
+            submitGuess.addEventListener("click", handleGuess);
+            restartGame.addEventListener("click", resetGame);
+        });
+    </script>
+</body>
+</html>
